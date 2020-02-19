@@ -10,7 +10,10 @@ import Foundation
 
 struct Game {
     mutating internal func restart() {
-        
+        board = GameBoard()
+        activePlayer = .x
+        winningPlayer = nil
+        gameIsOver = false
     }
     
     mutating internal func makeMark(at coordinate: Coordinate) throws {
