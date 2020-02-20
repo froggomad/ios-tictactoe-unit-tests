@@ -17,7 +17,11 @@ struct Game {
     }
     
     mutating internal func makeMark(at coordinate: Coordinate) throws {
-        
+        do {
+            try board.place(mark: activePlayer ?? .x, on: coordinate)
+        } catch {
+            throw error
+        }
     }
     
     private(set) var board: GameBoard
