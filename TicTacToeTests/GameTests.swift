@@ -67,12 +67,6 @@ class GameTests: XCTestCase {
     func testMakeMarkIsUpdatingWinningPlayer() {
         let board = GameBoard()
         var game = Game(board: board, activePlayer: .o, gameIsOver: true)
-        try! game.makeMark(at: (0,0))
-        try! game.makeMark(at: (1,0))
-        try! game.makeMark(at: (2,0))
-        try! game.makeMark(at: (0,1))
-        try! game.makeMark(at: (1,1))
-        try! game.makeMark(at: (2,1))
         try! game.makeMark(at: (0,2))
         try! game.makeMark(at: (1,2))
         try! game.makeMark(at: (2,2))
