@@ -12,19 +12,6 @@ import XCTest
 class GameTests: XCTestCase {
     
     //=======================
-    // MARK: - Test board isEmpty implementation (other tests rely on this implementation)
-    func testBoardIsEmptyAtStart() {
-        let board = GameBoard()
-        XCTAssertTrue(board.isEmpty)
-    }
-    
-    func testBoardIsNotEmptyAfterMove() {
-        var board = GameBoard()
-        try! board.place(mark: .o, on: (0,0))
-        XCTAssertFalse(board.isEmpty)
-    }
-    
-    //=======================
     // MARK: - test game state after restart
     func testBoardIsEmptyAfterRestart() {
         var board = GameBoard()
@@ -49,7 +36,7 @@ class GameTests: XCTestCase {
     
     func testNoWinningPlayerAfterRestart() {
         let board = GameBoard()
-        var game = Game(board: board, activePlayer: .o, gameState: .won(.x))
+        var game = Game(board: board, activePlayer: .o, gameState: .won)
         game.restart()
         XCTAssertTrue(game.winningPlayer == nil)
     }
@@ -64,9 +51,11 @@ class GameTests: XCTestCase {
     
     func testMakeMarkIsUpdatingWinningPlayer() {
         var game = Game(activePlayer: .o)
-        try! game.makeMark(at: (0,2))
-        try! game.makeMark(at: (1,2))
-        try! game.makeMark(at: (2,2))
+        try! game.makeMark(at: (0,2)) //o
+        try! game.makeMark(at: (0, 0))
+        try! game.makeMark(at: (1,2)) //o
+        try! game.makeMark(at: (0, 1))
+        try! game.makeMark(at: (2,2)) //o
         XCTAssertTrue(game.winningPlayer == .o)
     }
     

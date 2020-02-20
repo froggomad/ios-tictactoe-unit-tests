@@ -11,6 +11,19 @@ import XCTest
 
 class GameBoardTests: XCTestCase {
     
+    //=======================
+    // MARK: - Test board isEmpty implementation
+    func testBoardIsEmptyAtStart() {
+        let board = GameBoard()
+        XCTAssertTrue(board.isEmpty)
+    }
+    
+    func testBoardIsNotEmptyAfterMove() {
+        var board = GameBoard()
+        try! board.place(mark: .o, on: (0,0))
+        XCTAssertFalse(board.isEmpty)
+    }
+    
     func testCreatingEmptyBoard() {
         let board = GameBoard()
 

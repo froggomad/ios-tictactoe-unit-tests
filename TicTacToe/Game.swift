@@ -12,45 +12,40 @@ struct Game {
     //=======================
     // MARK: - State
     enum GameState {
-        case active(GameBoard.Mark) // Active player
+        case active // Active player
         case cat
-        case won(GameBoard.Mark) // Winning player
-    }
-    
-    init(board: GameBoard = GameBoard(), activePlayer: GameBoard.Mark?) {
-        self.board = board
-        self.activePlayer = activePlayer
-        self.gameState = GameState.active(.x)
+        case won // Winning player
     }
     
     //=======================
-    // MARK: - Test init
-    init(board: GameBoard, activePlayer: GameBoard.Mark?, gameState: GameState?) {
+    // MARK: - inits
+    ///New game
+    init(board: GameBoard = GameBoard(), activePlayer: GameBoard.Mark? = .x) {
         self.board = board
         self.activePlayer = activePlayer
-        guard let gameState = gameState else { return }
+        self.gameState = .active
+    }
+    
+    ///Test Case Init
+    init(board: GameBoard, activePlayer: GameBoard.Mark?, gameState: GameState) {
+        self.board = board
+        self.activePlayer = activePlayer
         self.gameState = gameState
     }
     
     //=======================
     // MARK: - Properties
     private(set) var board: GameBoard
-    
     internal var activePlayer: GameBoard.Mark?
+    internal var gameState: GameState
     internal var gameIsOver: Bool {
         switch gameState {
-        case .won(_):
+        case .won:
             return true
         case .cat:
             return true
-        case .active(_):
+        case .active:
             return false
-        }
-    }
-    
-    private var gameState = GameState.active(.x) {
-        didSet {
-            
         }
     }
     internal var winningPlayer: GameBoard.Mark?
@@ -61,13 +56,18 @@ struct Game {
         board = GameBoard()
         activePlayer = .x
         winningPlayer = nil
-        gameState = .active(activePlayer!) //set earlier in this block
+        gameState = .active
     }
     
     mutating internal func makeMark(at coordinate: Coordinate) throws {
         do {
             try board.place(mark: activePlayer ?? .x, on: coordinate)
-            isGameWon()
+            if isGameWon() {
+                
+            } else {
+                let player = activePlayer == .x ? GameBoard.Mark.o : GameBoard.Mark.x
+                activePlayer = player
+            }
         } catch {
             throw error
         }
@@ -83,6 +83,7 @@ struct Game {
                 }
             }
             if numMarks == 3 {
+                gameState = .won
                 winningPlayer = activePlayer
                 return true
             }
@@ -97,6 +98,7 @@ struct Game {
                 }
             }
             if numMarks == 3 {
+                gameState = .won
                 winningPlayer = activePlayer
                 return true
             }
@@ -111,6 +113,7 @@ struct Game {
             }
         }
         if numMatches == 3 {
+            gameState = .won
             winningPlayer = activePlayer
             return true
         }
@@ -123,6 +126,7 @@ struct Game {
             }
         }
         if numMatches == 3 {
+            gameState = .won
             winningPlayer = activePlayer
             return true
         }
