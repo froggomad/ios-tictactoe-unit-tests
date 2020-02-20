@@ -9,11 +9,59 @@
 import Foundation
 
 struct Game {
+    //=======================
+    // MARK: - State
+    enum GameState {
+        case active(GameBoard.Mark) // Active player
+        case cat
+        case won(GameBoard.Mark) // Winning player
+    }
+    
+    init(board: GameBoard = GameBoard(), activePlayer: GameBoard.Mark?) {
+        self.board = board
+        self.activePlayer = activePlayer
+        self.gameState = GameState.active(.x)
+    }
+    
+    //=======================
+    // MARK: - Test init
+    init(board: GameBoard, activePlayer: GameBoard.Mark?, gameState: GameState?) {
+        self.board = board
+        self.activePlayer = activePlayer
+        guard let gameState = gameState else { return }
+        self.gameState = gameState
+    }
+    
+    //=======================
+    // MARK: - Properties
+    private(set) var board: GameBoard
+    
+    internal var activePlayer: GameBoard.Mark?
+    internal var gameIsOver: Bool {
+        switch gameState {
+        case .won(_):
+            return true
+        case .cat:
+            return true
+        case .active(_):
+            return false
+        }
+    }
+    
+    private var gameState = GameState.active(.x) {
+        didSet {
+            
+        }
+    }
+    internal var winningPlayer: GameBoard.Mark?
+    
+    //=======================
+    // MARK: - Change Game State
     mutating internal func restart() {
         board = GameBoard()
         activePlayer = .x
         winningPlayer = nil
-        gameIsOver = false
+        gameState = .active(activePlayer!) //set earlier in this block
     }
     
     mutating internal func makeMark(at coordinate: Coordinate) throws {
@@ -81,11 +129,5 @@ struct Game {
         
         return false
     }
-    
-    private(set) var board: GameBoard
-    
-    internal var activePlayer: GameBoard.Mark?
-    internal var gameIsOver: Bool
-    internal var winningPlayer: GameBoard.Mark?
     
 }
